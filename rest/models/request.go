@@ -18,6 +18,9 @@ type RequestOptions struct {
 
 	// Trace enables request tracing
 	Trace bool
+
+	// RateLimit is a function that is called before every API call to throttle (if necessary).
+	RateLimiter func()
 }
 
 // RequestOption changes the configuration of RequestOptions.
@@ -83,5 +86,11 @@ func EdgeUserAgent(userAgent string) RequestOption {
 func WithTrace(trace bool) RequestOption {
 	return func(o *RequestOptions) {
 		o.Trace = trace
+	}
+}
+
+func WithRateLimiter(rl func()) RequestOption {
+	return func(o *RequestOptions) {
+		o.RateLimiter = rl
 	}
 }
